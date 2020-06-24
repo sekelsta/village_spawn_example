@@ -24,6 +24,7 @@ import net.minecraft.world.gen.feature.jigsaw.EmptyJigsawPiece;
 import net.minecraft.world.gen.feature.jigsaw.JigsawManager;
 import net.minecraft.world.gen.feature.jigsaw.JigsawPattern;
 import net.minecraft.world.gen.feature.jigsaw.SingleJigsawPiece;
+import net.minecraft.world.gen.feature.structure.PlainsVillagePools;
 
 import java.util.stream.Collectors;
 
@@ -47,8 +48,7 @@ public class VillageSpawnExample
     {
         // some preinit code
         LOGGER.info("HELLO FROM PREINIT");
-        System.out.println(new ResourceLocation("village/common/animals"));
-        // This is too early to call changeSpawns()
+        changeSpawns();
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
@@ -56,8 +56,6 @@ public class VillageSpawnExample
     public void onServerStarting(FMLServerStartingEvent event) {
         // do something when the server starts
         LOGGER.info("HELLO from server starting");
-        // This works only on villages far enough from the spawn point
-        changeSpawns();
     }
 
     // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
@@ -73,7 +71,9 @@ public class VillageSpawnExample
 
     // Replace each group of village animals with a black cat
     private void changeSpawns() {
-        // This code needs to run AFTER the PlainsVillagePools static initializer
+        // Force the static block to run
+        PlainsVillagePools.init();
+        // Sanity check
         if (JigsawManager.REGISTRY.get(new ResourceLocation("minecraft", "village/common/animals")) == JigsawPattern.INVALID) {
             System.out.println("This code is being called too early");
         }
