@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 @Mod("village_spawn_example")
 public class VillageSpawnExample
 {
+    static final String MODID = "village_spawn_example";
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -46,6 +47,7 @@ public class VillageSpawnExample
     {
         // some preinit code
         LOGGER.info("HELLO FROM PREINIT");
+        System.out.println(new ResourceLocation("village/common/animals"));
         // This is too early to call changeSpawns()
     }
 
@@ -78,19 +80,10 @@ public class VillageSpawnExample
         else {
             System.out.println("Trying to change village spawns");
         }
-      // Overwrite vanilla spawning with empty jigsaws
-      JigsawManager.REGISTRY.register(new JigsawPattern(new ResourceLocation("minecraft", "village/common/animals"), new ResourceLocation("minecraft", "empty"), 
-            ImmutableList.of(), JigsawPattern.PlacementBehaviour.RIGID));
-
-      JigsawManager.REGISTRY.register(new JigsawPattern(new ResourceLocation("minecraft", "village/common/sheep"), new ResourceLocation("minecraft", "empty"), ImmutableList.of(), JigsawPattern.PlacementBehaviour.RIGID));
-
-      JigsawManager.REGISTRY.register(new JigsawPattern(new ResourceLocation("minecraft", "village/common/cats"), new ResourceLocation("minecraft", "empty"), ImmutableList.of(), JigsawPattern.PlacementBehaviour.RIGID));
-
-      JigsawManager.REGISTRY.register(new JigsawPattern(new ResourceLocation("minecraft", "village/common/butcher_animals"), new ResourceLocation("minecraft", "empty"), ImmutableList.of(), JigsawPattern.PlacementBehaviour.RIGID));
 
 
-
-      // Add black cats (note that resource locations here are mod dependent, this is to avoid conflicts)
+      // Replace with black cats
+      // This still puts them in minecraft's resource space, otherwise they aren't used
       JigsawManager.REGISTRY.register(new JigsawPattern(new ResourceLocation("village/common/animals"), new ResourceLocation("empty"), 
             ImmutableList.of(
                 new Pair<>(new SingleJigsawPiece("village/common/animals/cat_black"), 21), 
